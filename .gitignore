@@ -106,3 +106,6 @@ dist
 .idea/
 
 **/public/build/
+
+# MacOS
+.DS_Store
