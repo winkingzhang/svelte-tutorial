@@ -1,4 +1,6 @@
 <script>
+    import NumberPad from './NumberPad.svelte';
+
     export let name;
 
     let supportedOperators = [
@@ -12,8 +14,8 @@
     let second = Math.ceil(Math.random() * 100);
     let operator = 0;
 
-    $: result = (op => op.action(first, second))(supportedOperators.filter(({value}) => value === operator)
-            .shift() || supportedOperators[0]);
+    $: result = (op => op.action(first, second))(
+        supportedOperators.filter(({value}) => value === operator).shift() || supportedOperators[0]);
 </script>
 
 <main>
@@ -23,31 +25,32 @@
     <h1>Flex Calculator</h1>
     <div class="container">
         <div class="row">
-            <label for="first">
-                <span>First number: </span>
-            </label>
-            <input id="first" type="number" bind:value={first}>
-        </div>
-        <div class="row">
-            <label for="operator">
-                <span>Operator: </span>
-            </label>
-            <div>
-                {#each supportedOperators as { name, display, value}, i}
-                    <label>
-                        <input type=radio bind:group={operator} value={value}>
-                        {name} ({display})
-                    </label>
-                {/each}
+            <div class="col">
+                <label for="first">
+                    <span>First number: </span>
+                </label>
+                <NumberPad bind:value={first}/>
+            </div>
+            <div class="col">
+                <label for="operator">
+                    <span>Operator: </span>
+                </label>
+                <div>
+                    {#each supportedOperators as { name, display, value}, i}
+                        <label>
+                            <input type=radio bind:group={operator} value={value}>
+                            {name} ({display})
+                        </label>
+                    {/each}
+                </div>
+            </div>
+            <div class="col">
+                <label for="second">
+                    <span>Second number: </span>
+                </label>
+                <NumberPad bind:value={second}/>
             </div>
         </div>
-        <div class="row">
-            <label for="second">
-                <span>Second number: </span>
-            </label>
-            <input id="second" type="number" bind:value={second}>
-        </div>
-
         <div class="row">
             <p class="result">{first} {supportedOperators[operator].display} {second} = {result}</p>
         </div>
@@ -75,21 +78,21 @@
     }
 
     .row {
+        display: flex;
         flex: 1 1;
         flex-basis: 100%;
         margin: 10px 0;
+        justify-content: center;
     }
 
-    .row:before, .row:after {
-        display: table;
-        content: " ";
-        clear: both
-    }
-
-    span {
-        display: inline-block;
-        text-align: right;
+    .col {
+        margin: 0 2em;
+        text-align: left;
         min-width: 10em;
+    }
+
+    .col label {
+        margin-bottom: 0.5em;
     }
 
     p.result {
